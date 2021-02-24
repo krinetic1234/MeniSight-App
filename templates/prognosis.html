@@ -3,9 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prognosis</title>
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,400&family=Nunito+Sans:wght@300;700&display=swap" rel="stylesheet">
+
+     <title>Prognosis</title>
+
+     <!-- Boostrap -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+     <style>
+       
+
+        #prognosis-header h1 {
+            font-family: "Lato", sans-serif;
+            color: #3e4450;
+            margin-left: 30px;
+            margin-top: 30px;
+            font-size: 25px;
+        }
+
+        #prognosis-header p {
+            font-family: "Nunito Sans", sans-serif;
+            font-size: 18px;
+            width: 80%;
+            margin-left: 50px;
+            margin-top: 30px;
+        }
+
+        form {
+            display: inline-block;
+            /* border: 3px solid black; */
+            align-items: center;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            width: 80%;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .form-group label
+        {
+            position: fixed;
+            left: 200px;
+            font-family: "Lato", sans-serif;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        .btn-predict {
+            position: fixed;
+            left: 45%;
+            bottom: 40px;
+            visibility: visible;
+            background-color: green;
+            margin: auto;
+            font-family: "Lato", sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            letter-spacing: 1px;
+            padding: 10px 32px 12px 32px;
+            border-radius: 4px;
+            transition: 0.5s;
+            color: white;
+            background: #08af93;
+            box-shadow: 0 8px 28px rgba(5, 102, 57, 0.45);
+        }
+
+        .btn-predict:hover {
+            background: #297bda;
+            box-shadow: 0 8px 28px rgba(30, 80, 172, 0.45);
+        }
+
+        #bottom-bar .btn-back {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-family: "Lato", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding: 8px 30px 10px 30px;
+            border-radius: 4px;
+            transition: 0.5s;
+            color: #fff;
+            background: #e4941b;
+            box-shadow: 0 8px 28px rgba(202, 127, 14, 0.45);
+        }
+
+        #bottom-bar .btn-back:hover {
+            background: #df3e16;
+            box-shadow: 0 8px 28px rgba(247, 202, 6, 0.45);
+        }
+     </style>
 </head>
+
 <body>
+    <!-- Prognosis -->
+    <section id="prognosis-header">
+        <h1>Predicting the Prognostic Outcome</h2>
+        <p>For each option below, please select the appropiate values corresponding to your patient, so that a survival curve can be computed.</p>
+    </section>
+
+    <form>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" class="form-control" id="age" min="0" max="100" placeholder="Min: 0, Max: 100">
+        </div>
+        <div class="form-group">
+          <label for="race">Race</label>
+          <select class="form-control" id="race">
+            <option>White</option>
+            <option>Black</option>
+            <option>American Indian/Alaska Native</option>
+            <option>Asian or Pacific Islander</option>
+          </select>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select class="form-control" id="gender">
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tumor">Tumor Behavior</label>
+            <select class="form-control" id="tumor">
+              <option>Benign</option>
+              <option>Borderline</option>
+              <option>Malignant</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tumor">Tumor Site</label>
+            <input type="number" class="form-control" id="site" min="700" max="800" placeholder="Common Sites include 700, 701, 709, etc..">
+        </div>
+        <div class="form-group">
+            <label for="size">Tumor Size</label>
+            <input type="number" class="form-control" id="size" min="0" max="999" placeholder="Min: 0, Max: 999">
+        </div>
+        <div class="form-group">
+            <label for="laterality">Laterality</label>
+            <select class="form-control" id="tumor">
+              <option>Right - Origin of Primary</option>
+              <option>Left - Origin of Primary</option>
+              <option>Bilateral - Single Primary</option>
+              <option>Paired Site - Midline Tumor</option>
+            </select>
+        </div>
+    </form>
+
+    <footer id="bottom-bar">
+        <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
+        <a class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn" onClick="predict()">Compute</a>
+        <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
+    </footer>
+
+    <!-- Preview -->
+    <script>
+        function previewFile() {
+            var preview = document.getElementById('selected-image');
+            var file = document.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
     
+           preview.style.visibility = "visible";
+    
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+    
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

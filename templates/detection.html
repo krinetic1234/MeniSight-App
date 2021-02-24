@@ -60,7 +60,7 @@
         .btn-predict {
             position: fixed;
             left: 45%;
-            bottom: 60px;
+            bottom: 40px;
             visibility: visible;
             background-color: green;
             margin: auto;
@@ -133,7 +133,7 @@
                   <input id="customFile" type="file" class="custom-file-input rounded-pill" onchange="previewFile()">
                   <label for="customFile" class="custom-file-label rounded-pill">Choose file</label>
                 </div>
-                <img src="" id="selected-image" width="300" alt="" style="visibility: hidden; margin-left: 20%;">
+                <img src="" id="selected-image" width="300" max-height="500" alt="" style="visibility: hidden; margin-left: 20%;">
                 <!-- End -->
               </div>
           </div>
@@ -142,7 +142,6 @@
 
     <footer id="bottom-bar">
         <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
-        <h2 style="font-size: 20px; font-family: Lato; position: fixed; bottom: 50px; left: 450px; visibility: hidden;" id="prediction-text">Test</h2>
         <a class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn" onClick="predict()">Predict</a>
         <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
     </footer>

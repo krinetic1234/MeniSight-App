@@ -1,6 +1,6 @@
 {
-  "name": "Flask-PWA",
-  "short_name": "Flask-PWA",
+  "name": "MeniSight",
+  "short_name": "MeniSIght",
   "description": "A progressive webapp template built with Flask",
   "theme_color": "transparent",
   "background_color": "transparent",
