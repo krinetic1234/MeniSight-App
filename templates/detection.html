@@ -3,9 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detection</title>
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,400&family=Nunito+Sans:wght@300;700&display=swap" rel="stylesheet">
+
+      <!-- Detection CSS File -->
+      <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/detection.css') }}"> -->
+     <title>Detection</title>
+
+     <!-- Boostrap -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+     <style>
+        #detection-header h1 {
+            font-family: "Lato", sans-serif;
+            color: #3e4450;
+            margin-left: 30px;
+            margin-top: 30px;
+            font-size: 25px;
+        }
+
+        #detection-header p {
+            font-family: "Nunito Sans", sans-serif;
+            font-size: 18px;
+            width: 80%;
+            margin-left: 50px;
+            margin-top: 30px;
+        }
+
+        .upload-title {
+            font-family: "Nunito Sans", sans-serif;
+            font-size: 30px;
+        }
+
+        .file-upload input[type='file'] {
+        display: none;
+        }
+
+        .rounded-lg {
+        border-radius: 1rem;
+        }
+
+        .custom-file-label.rounded-pill {
+        border-radius: 50rem;
+        }
+
+        .custom-file-label.rounded-pill::after {
+        border-radius: 0 50rem 50rem 0;
+        }
+
+        * {
+            overflow: hidden;
+        }
+
+        .btn-predict {
+            position: fixed;
+            left: 45%;
+            bottom: 60px;
+            visibility: visible;
+            background-color: green;
+            margin: auto;
+            font-family: "Lato", sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            letter-spacing: 1px;
+            padding: 10px 32px 12px 32px;
+            border-radius: 4px;
+            transition: 0.5s;
+            color: white;
+            background: #08af93;
+            box-shadow: 0 8px 28px rgba(5, 102, 57, 0.45);
+        }
+
+        .btn-predict:hover {
+            background: #297bda;
+            box-shadow: 0 8px 28px rgba(30, 80, 172, 0.45);
+        }
+
+        #bottom-bar .btn-back {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-family: "Lato", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding: 8px 30px 10px 30px;
+            border-radius: 4px;
+            transition: 0.5s;
+            color: #fff;
+            background: #e4941b;
+            box-shadow: 0 8px 28px rgba(202, 127, 14, 0.45);
+        }
+
+        #bottom-bar .btn-back:hover {
+            background: #df3e16;
+            box-shadow: 0 8px 28px rgba(247, 202, 6, 0.45);
+        }
+     </style>
 </head>
+
 <body>
+  <!-- Detection -->
+    <section id="detection-header">
+        <h1>Detecting presence of Meningioma Tumor</h2>
+        <p>If you are unsure if your patient has a tumor, you have come to the right place! Please upload an MRI image and within seconds, our deep learning system will provide an accurate prediction using a combination of Convolutional Neural Networks.</p>    
+    </section>
+
+    <!-- Input MRI image -->
+    <section>
+        <!-- <div class="container p-5">
+          <div class="row mb-5 text-center">
+            <div class="col-lg-10 mx-auto">
+              <p class="upload-title"> MRI Image</p>
+            </div>
+          </div> -->
+      
+          <div class="row">
+            <div class="col-lg-5 mx-auto">
+              <div class="p-5 bg-white shadow rounded-lg">
+                <!-- <img class="upload-img" src="https://res.cloudinary.com/mhmd/image/upload/v1557366994/img_epm3iz.png" alt="" height="200" width="auto" class="d-block mx-auto mb-4 rounded-pill"> -->
+                <!-- Default bootstrap file upload-->  
+                <h3 class="text-center mb-4 text-muted">
+                  Upload MRI image below
+                </h3>
+                <div class="custom-file overflow-hidden rounded-pill mb-5">
+                  <input id="customFile" type="file" class="custom-file-input rounded-pill" onchange="previewFile()">
+                  <label for="customFile" class="custom-file-label rounded-pill">Choose file</label>
+                </div>
+                <img src="" id="selected-image" width="300" alt="" style="visibility: hidden; margin-left: 20%;">
+                <!-- End -->
+              </div>
+          </div>
+        </div>
+    </section>
+
+    <footer id="bottom-bar">
+        <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
+        <h2 style="font-size: 20px; font-family: Lato; position: fixed; bottom: 50px; left: 450px; visibility: hidden;" id="prediction-text">Test</h2>
+        <a class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn" onClick="predict()">Predict</a>
+        <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
+    </footer>
+
+    <!-- Preview -->
+    <script>
+        function previewFile() {
+            var preview = document.getElementById('selected-image');
+            var file = document.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
     
+           preview.style.visibility = "visible";
+    
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+    
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
