@@ -9,7 +9,7 @@ import cv2
 
 app = Flask(__name__)
 
-detection_model = load_model('detection_weights.h5')
+detection_model = load_model('detection.h5')
 
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

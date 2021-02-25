@@ -129,7 +129,7 @@
                 <h3 class="text-center mb-4 text-muted">
                   Upload MRI image below
                 </h3>
-                <form method="post" class="custom-file overflow-hidden rounded-pill mb-5">
+                <form action="/detection" method="post" class="custom-file overflow-hidden rounded-pill mb-5">
                   <input id="customFile" type="file" class="custom-file-input rounded-pill" onchange="previewFile()">
                   <label for="customFile" class="custom-file-label rounded-pill">Choose file</label>
                   <input value="Predict" type="submit" class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn" onClick="predict()">
