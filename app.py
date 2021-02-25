@@ -1,24 +1,26 @@
-from flask import Flask, render_template, request
-import os
-from joblib import dump, load
+from flask import Flask, request, redirect, url_for, send_from_directory, render_template, flash
+from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+from keras.models import Sequential, load_model
 import tensorflow as tf
-import keras
-from keras.models import load_model
+from werkzeug.utils import secure_filename
+import numpy as np
 import pandas as pd
 import cv2
+import os
 
-app = Flask(__name__)
-
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
+IMAGE_SIZE = (300, 300)
+UPLOAD_FOLDER = './uploads'
 detection_model = load_model('detection.h5')
 
-UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-DETECTION = 'detection.html'
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -28,37 +30,48 @@ def index():
 
 @app.route('/detection', methods=['GET', 'POST'])
 def detection():
+    print(request.method)
     if request.method == 'POST':
-        if(request.form["type"] == "0"):
-            if 'image' not in request.files:
-                return render_template(DETECTION, output="File not found! Please try re-uploading.")
-            f = request.files["image"]
-            if f.filename == '':
-                return render_template(DETECTION, output="File not found! Please try re-uploading.")
-            if f and allowed_file(f.filename):
-                filename = f.filename
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                f.save(filepath)
-                image = cv2.imread(filepath, cv2.IMREAD_COLOR)
-                image = cv2.resize(image, (300, 300))
-                image_tensor = tf.convert_to_tensor(image, dtype=tf.float32)
-                image_tensor = tf.expand_dims(image_tensor, 0)
-                result = detection_model.predict(image_tensor)[0][0]
-                print(result)
-                result = result * 100
-                if(result < 0):
-                    result = 0
-                if(result > 100):
-                    result = 100
-                result = round(result, 2)
-                result = str(result)
-                output = result + "% chance of tumor"
-                return render_template(DETECTION, output=output)
-            return render_template(DETECTION, output="An unknown error occurred!")
+        if 'file' not in request.files:
+            return render_template('detection.html', output="File not found! Please try re-uploading.")
+        f = request.files["file"]
+        if f.filename == '':
+            return render_template('detection.html', output="File not found! Please try re-uploading.")
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            f.save(filepath)
+            image = cv2.imread(filepath)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            image = cv2.resize(image, (300, 300))
+            # print("Image")
+            # print(image.shape)
+            image_tensor = tf.convert_to_tensor(image, dtype=tf.float32)
+
+            # print("Tensor")
+            # print(image_tensor.shape.as_list())
+
+            image_tensor = tf.expand_dims(image_tensor, 2)
+            image_tensor = tf.expand_dims(image_tensor, 0)
+
+            # print("After Expand")
+            # print(image_tensor.shape.as_list())
+
+            result = detection_model.predict(image_tensor)[0][0]
+            result = result * 100
+            if(result < 0):
+                result = 0
+            if(result > 100):
+                result = 100
+            result = round(result, 2)
+            result = str(result)
+            print(result)
+            output = result + "% chance of a meningioma tumor"
+            return render_template('detection.html', output=output)
         else:
-            return render_template(DETECTION, output="Coming soon!")
+            return render_template('detection.html', output="An unknown error occurred!")
     else:
-        return render_template(DETECTION, output="")
+        return render_template('detection.html', output="")
 
 
 @app.route('/prognosis')
