@@ -112,14 +112,14 @@
         <p>For each option below, please select the appropiate values corresponding to your patient, so that a survival curve can be computed.</p>
     </section>
 
-    <form>
+    <form method="POST" action="/prognosis" enctype="multipart/form-data">
         <div class="form-group">
           <label for="age">Age</label>
-          <input type="number" class="form-control" id="age" min="0" max="100" placeholder="Min: 0, Max: 100">
+          <input name="age" type="number" class="form-control" id="age" min="0" max="100" placeholder="Min: 0, Max: 100">
         </div>
         <div class="form-group">
           <label for="race">Race</label>
-          <select class="form-control" id="race">
+          <select name="race" class="form-control" id="race">
             <option>White</option>
             <option>Black</option>
             <option>American Indian/Alaska Native</option>
@@ -128,14 +128,14 @@
         </div>
         <div class="form-group">
             <label for="gender">Gender</label>
-            <select class="form-control" id="gender">
+            <select name="gender" class="form-control" id="gender">
               <option>Male</option>
               <option>Female</option>
             </select>
         </div>
         <div class="form-group">
             <label for="tumor">Tumor Behavior</label>
-            <select class="form-control" id="tumor">
+            <select name="behav" class="form-control" id="tumor">
               <option>Benign</option>
               <option>Borderline</option>
               <option>Malignant</option>
@@ -143,26 +143,26 @@
         </div>
         <div class="form-group">
             <label for="tumor">Tumor Site</label>
-            <input type="number" class="form-control" id="site" min="700" max="800" placeholder="Common Sites include 700, 701, 709, etc..">
+            <input name="site" type="number" class="form-control" id="site" min="700" max="800" placeholder="Common Sites include 700, 701, 709, etc..">
         </div>
         <div class="form-group">
             <label for="size">Tumor Size</label>
-            <input type="number" class="form-control" id="size" min="0" max="999" placeholder="Min: 0, Max: 999">
+            <input name="size" type="number" class="form-control" id="size" min="0" max="999" placeholder="Min: 0, Max: 999">
         </div>
         <div class="form-group">
             <label for="laterality">Laterality</label>
-            <select class="form-control" id="tumor">
+            <select name="laterality" class="form-control" id="tumor">
               <option>Right - Origin of Primary</option>
               <option>Left - Origin of Primary</option>
               <option>Bilateral - Single Primary</option>
               <option>Paired Site - Midline Tumor</option>
             </select>
         </div>
+        <input value="Compute" type="submit" class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn">
     </form>
 
     <footer id="bottom-bar">
         <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
-        <a class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn" onClick="predict()">Compute</a>
         <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
     </footer>
 

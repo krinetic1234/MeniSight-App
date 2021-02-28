@@ -30,7 +30,6 @@ def index():
 
 @app.route('/detection', methods=['GET', 'POST'])
 def detection():
-    print(request.method)
     if request.method == 'POST':
         if 'file' not in request.files:
             return render_template('detection.html', output="File not found! Please try re-uploading.")
@@ -74,9 +73,26 @@ def detection():
         return render_template('detection.html', output="")
 
 
-@app.route('/prognosis')
+@app.route('/prognosis', methods=['GET', 'POST'])
 def prognosis():
-    return render_template('prognosis.html')
+    if request.method == 'POST':
+        age = float(request.form["age"])
+        race = request.form["race"]
+        gender = request.form["gender"]
+        behavior = request.form["behav"]
+        size = float(request.form["size"])
+        site = request.form["site"]
+        laterality = request.form["laterality"]
+
+        prog_data = {'AGE': [age], 'LATITUDE': [
+            longitude], 'MONTH': [month], 'DAY': [day], 'DEATHS': [deaths]}
+
+        meningioma_df = pd.DataFrame(data=prog_data)
+
+        output = ""
+        return render_template('prognosis.html', output=output)
+    else:
+        return render_template('prognosis.html', output="")
 
 
 @app.route('/service-worker.js')
