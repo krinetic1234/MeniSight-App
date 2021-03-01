@@ -42,15 +42,16 @@
         }
 
         .rounded-lg {
-        border-radius: 1rem;
+            border-radius: 1rem;
         }
 
         .custom-file-label.rounded-pill {
-        border-radius: 50rem;
+            border-radius: 50rem;
         }
 
+
         .custom-file-label.rounded-pill::after {
-        border-radius: 0 50rem 50rem 0;
+            border-radius: 0 50rem 50rem 0;
         }
 
         * {
@@ -114,6 +115,12 @@
 
     <!-- Input MRI image -->
     <section>
+
+        {% if output != "" and passed == "true" %}
+	    <center>
+	      <h1 class="output">{{output}}</h1>
+	    </center>
+	    {% endif %}
         <!-- <div class="container p-5">
           <div class="row mb-5 text-center">
             <div class="col-lg-10 mx-auto">
@@ -131,7 +138,7 @@
                 </h3>
                 <form method="POST" action="/detection" enctype="multipart/form-data" class="custom-file overflow-hidden rounded-pill mb-5">
                   <input id="file" type="file" name="file" class="custom-file-input rounded-pill" onchange="previewFile()">
-                  <label for="file" class="custom-file-label rounded-pill">Choose file</label>
+                  <label for="file" id="label-file" class="custom-file-label rounded-pill">Choose file</label>
                   <input value="Predict" type="submit" class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn">
                 </form>
                 <img src="" id="selected-image" width="300" max-height="500" alt="" style="visibility: hidden; margin-left: 20%;">
@@ -149,11 +156,14 @@
     <!-- Preview -->
     <script>
         function previewFile() {
+            var label = document.getElementById('label-file')
             var preview = document.getElementById('selected-image');
             var file = document.querySelector('input[type=file]').files[0];
             var reader = new FileReader();
-    
-           preview.style.visibility = "visible";
+            
+            let fn = file.name;
+            label.innerHTML = fn + " was uploaded successfully!";
+            preview.style.visibility = "visible";
     
             reader.onloadend = function () {
                 preview.src = reader.result;

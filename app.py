@@ -5,6 +5,8 @@ import tensorflow as tf
 from werkzeug.utils import secure_filename
 import numpy as np
 import pandas as pd
+import sklearn as sk
+from sksurv.linear_model import CoxnetSurvivalAnalysis
 import cv2
 import os
 
@@ -66,28 +68,59 @@ def detection():
             result = str(result)
             print(result)
             output = result + "% chance of a meningioma tumor"
-            return render_template('detection.html', output=output)
+            return render_template('detection.html', output=output, passed="true")
         else:
-            return render_template('detection.html', output="An unknown error occurred!")
+            return render_template('detection.html', output="An unknown error occurred!", passed="true")
     else:
-        return render_template('detection.html', output="")
+        return render_template('detection.html', output="", passed="false")
 
 
 @app.route('/prognosis', methods=['GET', 'POST'])
 def prognosis():
     if request.method == 'POST':
+        # Orig Data
+        column_names = ['Age', 'Race', 'Sex', 'Behavior', 'Size',
+                        'Site', 'Laterality', 'Status Recode', 'Survival Months']
+        orig_dataf = pd.read_csv('prognosis-data.csv', na_values="NaN")
+        orig_dataf.columns = column_names
+        orig_dataf.drop(orig_dataf.tail(12514).index, inplace=True)
+        orig_dataf['Age'] = orig_dataf['Age'].str[:2]
+        orig_dataf = orig_dataf.iloc[:, :-2]
+
+        # Grab our data
         age = float(request.form["age"])
         race = request.form["race"]
-        gender = request.form["gender"]
+        sex = request.form["gender"]
         behavior = request.form["behav"]
         size = float(request.form["size"])
         site = request.form["site"]
         laterality = request.form["laterality"]
 
-        prog_data = {'AGE': [age], 'LATITUDE': [
-            longitude], 'MONTH': [month], 'DAY': [day], 'DEATHS': [deaths]}
+        prog_data = {'Age': [age], 'Race': [
+            race], 'Sex': [sex], 'Behavior': [behavior], 'Size': [size], 'Site': [site], 'Size': [size], 'Laterality': [laterality]}
 
-        meningioma_df = pd.DataFrame(data=prog_data)
+        prog_dataf = pd.DataFrame(data=prog_data)
+
+        #   Concat dataframes
+        prog_dataf = prog_dataf.append(orig_dataf)
+        convert_dict = {'Race': 'category',
+                        'Sex': 'category',
+                        'Behavior': 'category',
+                        'Site': 'category',
+                        'Laterality': 'category',
+                        }
+
+        prog_dataf = prog_dataf.astype(convert_dict)
+
+        non_dummy_cols = ['Age', 'Size']
+        dummy_cols = list(set(prog_dataf.columns) - set(non_dummy_cols))
+        prog_dataf = pd.get_dummies(prog_dataf, columns=dummy_cols)
+
+        data = prog_dataf[0]
+        print(data)
+
+        coxnet = CoxnetSurvivalAnalysis(l1_ratio=0.9, fit_baseline_model=True)
+        coxnet.fit(X_train, Y_train)
 
         output = ""
         return render_template('prognosis.html', output=output)
