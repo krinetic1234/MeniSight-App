@@ -22,7 +22,8 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 IMAGE_SIZE = (300, 300)
 UPLOAD_FOLDER = './uploads'
 detection_model = load_model('detection.h5')
-coxnet = load('coxnet.joblib')
+gb = load('coxnet.joblib')
+surv_funcs = {}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -124,31 +125,24 @@ def prognosis():
         dummy_cols = list(set(prog_dataf.columns) - set(non_dummy_cols))
         prog_dataf = pd.get_dummies(prog_dataf, columns=dummy_cols)
         prog_dataf = prog_dataf.drop(columns=["Sex_Male", "Race_Unknown"])
-        print(prog_dataf.columns)
+        # print(prog_dataf.columns)
 
         data = prog_dataf.iloc[:1]
-        print(data)
-
-        surv_funcs = {}
-        surv_funcs[0] = coxnet.predict_survival_function(data)
-
-        print(surv_funcs)
-        # for alpha, surv_alpha in surv_funcs.items():
-        #     for fn in surv_alpha:
-        #         plt.step(fn.x, fn(fn.x), where="post")
-
-        # plt.ylim(0, 1)
-        # plt.legend()
-        # plt.show()
+        surv_funcs[0] = gb.predict_survival_function(data)
 
         output = ""
         return render_template('survplot.html', output=output)
     else:
-        return render_template('survplot.html', output="")
+        return render_template('prognosis.html', output="")
+
+
+@app.route('/survplot', methods=["GET"])
+def survplot():
+    return render_template('survplot.html')
 
 
 @app.route('/plot.png')
-def survplot():
+def plot_png():
     fig = create_figure()
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
@@ -158,9 +152,15 @@ def survplot():
 def create_figure():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    xs = range(100)
-    ys = [random.randint(1, 50) for x in xs]
-    axis.plot(xs, ys)
+    for alpha, surv_alpha in surv_funcs.items():
+        for fn in surv_alpha:
+            axis.plot(fn.x, fn(fn.x))
+
+    axis.set_ylim([0, 1])
+    axis.set_title(
+        'Probability vs. Time curve for Patient Overall Survival (OS)')
+    axis.set_xlabel('Time (Months)')
+    axis.set_ylabel('Probability of Survival')
     return fig
 
 

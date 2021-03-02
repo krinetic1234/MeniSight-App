@@ -112,50 +112,56 @@
         <p>For each option below, please select the appropiate values corresponding to your patient, so that a survival curve can be computed.</p>
     </section>
 
-    <form method="POST" action="/survplot" enctype="multipart/form-data">
+    <form method="POST" action="/prognosis" enctype="multipart/form-data">
         <div class="form-group">
           <label for="age">Age</label>
-          <input name="age" type="number" class="form-control" id="age" min="0" max="85" placeholder="Min: 0, Max: 100">
+          <input name="age" type="number" class="form-control" id="age" min="0" max="85" placeholder="Min: 0, Max: 100" required>
         </div>
         <div class="form-group">
           <label for="race">Race</label>
-          <select name="race" class="form-control" id="race">
+          <select name="race" class="form-control" id="race" required>
             <option>White</option>
             <option>Black</option>
-            <option>American Indian/Alaska Native</option>
-            <option>Asian or Pacific Islander</option>
+            <option>Other (American Indian/AK Native, Asian/Pacific Islander)</option>
+            <option>Unknown</option>
           </select>
         </div>
         <div class="form-group">
             <label for="gender">Gender</label>
-            <select name="gender" class="form-control" id="gender">
+            <select name="gender" class="form-control" id="gender" required>
               <option>Male</option>
               <option>Female</option>
             </select>
         </div>
         <div class="form-group">
             <label for="tumor">Tumor Behavior</label>
-            <select name="behav" class="form-control" id="tumor">
+            <select name="behav" class="form-control" id="tumor" required>
               <option>Benign</option>
               <option>Borderline</option>
-              <option>Malignant</option>
+              <option>9530/3: Meningioma, malignant</option>
+              <option>9531/3: Meningiothelial meningioma, malignant</option>
+              <option>9532/3: Fibrous meningioma, malignant</option>
+              <option>9534/3: Angiomatous meningioma, malignant</option>
+              <option>9537/3: Transitional meningioma, malignant</option>
+              <option>9538/3: Papillary meningioma</option>
+              <option>9539/3: Meningeal sarcomatosis</option>
             </select>
         </div>
         <div class="form-group">
             <label for="tumor">Tumor Site</label>
-            <input name="site" type="number" class="form-control" id="site" min="300" max="751" placeholder="Sites Allowed -- 313, 696, 700-701, 709-720, 722, 723, 725, 729, 751">
+            <input name="site" type="number" class="form-control" id="site" min="300" max="751" placeholder="Sites Allowed -- 313, 696, 700-701, 709-720, 722, 723, 725, 729, 751" required>
         </div>
         <div class="form-group">
             <label for="size">Tumor Size</label>
-            <input name="size" type="number" class="form-control" id="size" min="0" max="999" placeholder="Min: 0, Max: 999">
+            <input name="size" type="number" class="form-control" id="size" min="0" max="999" placeholder="Min: 0, Max: 999" required>
         </div>
         <div class="form-group">
             <label for="laterality">Laterality</label>
-            <select name="laterality" class="form-control" id="tumor">
+            <select name="laterality" class="form-control" id="tumor" required>
               <option>Right - origin of primary</option>
               <option>Left - origin of primary</option>
-              <option>Bilateral - single primary</option>
-              <option>Paired Site - midline tumor</option>
+              <option>Bilateral, single primary</option>
+              <option>Paired Site: midline tumor</option>
             </select>
         </div>
         <input value="Compute" type="submit" class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn">
