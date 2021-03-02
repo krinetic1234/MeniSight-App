@@ -112,10 +112,10 @@
         <p>For each option below, please select the appropiate values corresponding to your patient, so that a survival curve can be computed.</p>
     </section>
 
-    <form method="POST" action="/prognosis" enctype="multipart/form-data">
+    <form method="POST" action="/survplot" enctype="multipart/form-data">
         <div class="form-group">
           <label for="age">Age</label>
-          <input name="age" type="number" class="form-control" id="age" min="0" max="100" placeholder="Min: 0, Max: 100">
+          <input name="age" type="number" class="form-control" id="age" min="0" max="85" placeholder="Min: 0, Max: 100">
         </div>
         <div class="form-group">
           <label for="race">Race</label>
@@ -143,7 +143,7 @@
         </div>
         <div class="form-group">
             <label for="tumor">Tumor Site</label>
-            <input name="site" type="number" class="form-control" id="site" min="700" max="800" placeholder="Common Sites include 700, 701, 709, etc..">
+            <input name="site" type="number" class="form-control" id="site" min="300" max="751" placeholder="Sites Allowed -- 313, 696, 700-701, 709-720, 722, 723, 725, 729, 751">
         </div>
         <div class="form-group">
             <label for="size">Tumor Size</label>
@@ -152,10 +152,10 @@
         <div class="form-group">
             <label for="laterality">Laterality</label>
             <select name="laterality" class="form-control" id="tumor">
-              <option>Right - Origin of Primary</option>
-              <option>Left - Origin of Primary</option>
-              <option>Bilateral - Single Primary</option>
-              <option>Paired Site - Midline Tumor</option>
+              <option>Right - origin of primary</option>
+              <option>Left - origin of primary</option>
+              <option>Bilateral - single primary</option>
+              <option>Paired Site - midline tumor</option>
             </select>
         </div>
         <input value="Compute" type="submit" class="btn-predict scrollto" style="cursor: pointer;" id="predict-btn">
@@ -165,29 +165,7 @@
         <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
         <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
     </footer>
-
-    <!-- Preview -->
-    <script>
-        function previewFile() {
-            var preview = document.getElementById('selected-image');
-            var file = document.querySelector('input[type=file]').files[0];
-            var reader = new FileReader();
-    
-           preview.style.visibility = "visible";
-    
-            reader.onloadend = function () {
-                preview.src = reader.result;
-            }
-    
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-            }
-        }
-    
-    </script>
-
+      
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

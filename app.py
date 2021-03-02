@@ -7,6 +7,9 @@ import numpy as np
 import pandas as pd
 import sklearn as sk
 from sksurv.linear_model import CoxnetSurvivalAnalysis
+import matplotlib.pyplot as plt
+
+from joblib import dump, load
 import cv2
 import os
 
@@ -14,6 +17,7 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 IMAGE_SIZE = (300, 300)
 UPLOAD_FOLDER = './uploads'
 detection_model = load_model('detection.h5')
+coxnet = load('coxnet.joblib')
 
 
 app = Flask(__name__)
@@ -93,7 +97,7 @@ def prognosis():
         sex = request.form["gender"]
         behavior = request.form["behav"]
         size = float(request.form["size"])
-        site = request.form["site"]
+        site = float(request.form["site"])
         laterality = request.form["laterality"]
 
         prog_data = {'Age': [age], 'Race': [
@@ -115,12 +119,23 @@ def prognosis():
         non_dummy_cols = ['Age', 'Size']
         dummy_cols = list(set(prog_dataf.columns) - set(non_dummy_cols))
         prog_dataf = pd.get_dummies(prog_dataf, columns=dummy_cols)
+        prog_dataf = prog_dataf.drop(columns=["Sex_Male", "Race_Unknown"])
+        print(prog_dataf.columns)
 
-        data = prog_dataf[0]
+        data = prog_dataf.iloc[:1]
         print(data)
 
-        coxnet = CoxnetSurvivalAnalysis(l1_ratio=0.9, fit_baseline_model=True)
-        coxnet.fit(X_train, Y_train)
+        surv_funcs = {}
+        surv_funcs[0] = coxnet.predict_survival_function(data)
+
+        print(surv_funcs)
+        # for alpha, surv_alpha in surv_funcs.items():
+        #     for fn in surv_alpha:
+        #         plt.step(fn.x, fn(fn.x), where="post")
+
+        # plt.ylim(0, 1)
+        # plt.legend()
+        # plt.show()
 
         output = ""
         return render_template('prognosis.html', output=output)

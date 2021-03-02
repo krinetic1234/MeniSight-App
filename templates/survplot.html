@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,400&family=Nunito+Sans:wght@300;700&display=swap" rel="stylesheet">
+
+     <title>Prognosis | Survival Plot</title>
+
+     <!-- Boostrap -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+     <style>
+       
+
+        #prognosis-header h1 {
+            font-family: "Lato", sans-serif;
+            color: #3e4450;
+            margin-left: 30px;
+            margin-top: 30px;
+            font-size: 25px;
+        }
+
+        #prognosis-header p {
+            font-family: "Nunito Sans", sans-serif;
+            font-size: 18px;
+            width: 80%;
+            margin-left: 50px;
+            margin-top: 30px;
+        }
+
+        img {
+            display: inline-block;
+            /* border: 3px solid black; */
+            align-items: center;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        #bottom-bar .btn-back {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-family: "Lato", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding: 8px 30px 10px 30px;
+            border-radius: 4px;
+            transition: 0.5s;
+            color: #fff;
+            background: #e4941b;
+            box-shadow: 0 8px 28px rgba(202, 127, 14, 0.45);
+        }
+
+        #bottom-bar .btn-back:hover {
+            background: #df3e16;
+            box-shadow: 0 8px 28px rgba(247, 202, 6, 0.45);
+        }
+     </style>
+</head>
+
+<body>
+    <!-- Prognosis -->
+    <section id="prognosis-header">
+        <h1>Survival Graph Plot</h2>
+        <p>Below, you will see the output from the Gradient Boosting survival model.</p>
+    </section>
+
+    <img src="../static/img/plot.png" alt="Survival Plot">
+
+    <footer id="bottom-bar">
+        <a class="btn-back scrollto" style="cursor: pointer;" href="/">Back</a>
+        <h6 style="font-size: 13px; font-family: Lato; position: fixed; right: 20px; bottom: 0px;">Made with Flask by Krish Maniar</h6>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
