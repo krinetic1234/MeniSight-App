@@ -1,24 +1,28 @@
-from flask import Flask, request, redirect, url_for, send_from_directory, render_template, flash
+from flask import Flask, request, redirect, url_for, send_from_directory, render_template, flash, Response
+from werkzeug.utils import secure_filename
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from keras.models import Sequential, load_model
+from sksurv.linear_model import CoxnetSurvivalAnalysis
+
 import tensorflow as tf
-from werkzeug.utils import secure_filename
 import numpy as np
 import pandas as pd
 import sklearn as sk
-from sksurv.linear_model import CoxnetSurvivalAnalysis
-import matplotlib.pyplot as plt
-
-from joblib import dump, load
 import cv2
 import os
+import io
+import random
+
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+from joblib import dump, load
 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 IMAGE_SIZE = (300, 300)
 UPLOAD_FOLDER = './uploads'
 detection_model = load_model('detection.h5')
 coxnet = load('coxnet.joblib')
-
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -138,9 +142,26 @@ def prognosis():
         # plt.show()
 
         output = ""
-        return render_template('prognosis.html', output=output)
+        return render_template('survplot.html', output=output)
     else:
-        return render_template('prognosis.html', output="")
+        return render_template('survplot.html', output="")
+
+
+@app.route('/plot.png')
+def survplot():
+    fig = create_figure()
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+
+def create_figure():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    xs = range(100)
+    ys = [random.randint(1, 50) for x in xs]
+    axis.plot(xs, ys)
+    return fig
 
 
 @app.route('/service-worker.js')
