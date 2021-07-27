@@ -74,9 +74,9 @@ def detection():
             if(result > 100):
                 result = 100
             result = round(result, 2)
-            result = str(result)
-            print(result)
-            output = result + "% chance of a meningioma tumor"
+            result = int(result)
+            # print(result)
+            output = "Meningioma Tumor Detected" if result >= 50 else "No Tumor Detected!"
             return render_template('detection.html', output=output, passed="true")
         else:
             return render_template('detection.html', output="An unknown error occurred!", passed="true")
@@ -125,9 +125,10 @@ def prognosis():
         dummy_cols = list(set(prog_dataf.columns) - set(non_dummy_cols))
         prog_dataf = pd.get_dummies(prog_dataf, columns=dummy_cols)
         prog_dataf = prog_dataf.drop(columns=["Sex_Male", "Race_Unknown"])
-        # print(prog_dataf.columns)
+        print(prog_dataf.columns)
 
         data = prog_dataf.iloc[:1]
+        print(data)
         surv_funcs[0] = gb.predict_survival_function(data)
 
         output = ""
